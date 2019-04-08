@@ -53,8 +53,8 @@ public class RecyclerAdapterCategories extends RecyclerView.Adapter<RecyclerAdap
 
     class CategoriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView title;
-        TextView name;
+        private ImageView title;
+        private TextView name;
 
         private CategoriesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,7 +70,6 @@ public class RecyclerAdapterCategories extends RecyclerView.Adapter<RecyclerAdap
         @Override
         public void onClick(View view) {
             if (clickListener != null) {
-                Log.d("TEST", "CLICK POSITION recycler");
                 clickListener.onItemClick(view, getAdapterPosition());
             }
         }

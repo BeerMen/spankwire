@@ -56,9 +56,9 @@ public class RecyclerAdapterPornoStar extends RecyclerView.Adapter<RecyclerAdapt
 
     class PornoStarViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView title;
-        TextView name;
-        TextView videos;
+        private ImageView title;
+        private TextView name;
+        private TextView videos;
 
         private PornoStarViewHolder(@NonNull View itemView) {
             super(itemView);

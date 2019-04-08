@@ -5,10 +5,6 @@ import android.util.Log;
 
 import com.example.spankwire.VideoItems;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +43,7 @@ public class SearchNetwork {
             listener = (OnSearchInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + " должен реализовывать интерфейс");
         }
     }
 
@@ -61,12 +57,14 @@ public class SearchNetwork {
                 category).enqueue(new Callback<VideoItems>() {
             @Override
             public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                listener.onSearchInteraction(response.body());
+                if (response.body() != null) {
+                    listener.onSearchInteraction(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-
+                Log.d("DBAGME", t.toString());
             }
         });
     }

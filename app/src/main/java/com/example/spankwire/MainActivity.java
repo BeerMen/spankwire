@@ -1,7 +1,6 @@
 package com.example.spankwire;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,17 +13,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.example.spankwire.network.SearchNetwork;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -43,12 +37,13 @@ public class MainActivity extends AppCompatActivity
     private PornoStarFragment pornoStarFragment;
     private PreviouslyPornoStarsFragment previouslyPornoStarsFragment;
     private SearchNetwork searchNetwork = new SearchNetwork();
-    SearchView searchView = null;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initView();
         setupFragments();
     }
@@ -56,10 +51,12 @@ public class MainActivity extends AppCompatActivity
     private void setupFragments() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         pornoVideosFragment = new PornoVideosFragment();
         categoriesFragment = new CategoriesFragment();
         pornoStarFragment = new PornoStarFragment();
         previouslyPornoStarsFragment = new PreviouslyPornoStarsFragment();
+
         fragmentTransaction.add(R.id.previously_porno_stars_fragment,
                 previouslyPornoStarsFragment,
                 PreviouslyPornoStarsFragment.class.getSimpleName());
@@ -116,14 +113,14 @@ public class MainActivity extends AppCompatActivity
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    Log.d("DBAGMNE", "Submin " + s);
-                    if (!s.isEmpty()){
-                        searchNetwork.setResult(s);
+                    if (!s.isEmpty()) {
+                        String result = s.replace(" ","_");
+                        searchNetwork.setResult(result);
                     }
-                    if( ! searchView.isIconified()) {
+                    if (!searchView.isIconified()) {
                         searchView.setIconified(true);
                     }
-                    if (searchItem != null){
+                    if (searchItem != null) {
                         searchItem.collapseActionView();
                     }
                     return false;
@@ -131,10 +128,7 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    Log.d("DBAGMNE", "Change " + s);
-                    if (!s.isEmpty()){
 
-                    }
                     return true;
                 }
             });
@@ -157,7 +151,6 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.home:
                 pornoVideosFragment.recyclerAdapter.clear();
-                pornoVideosFragment.getListVideoPopularHome();
                 pornoVideosFragment.getListVideoPopularHome();
                 pornoVideoLayout.setVisibility(View.VISIBLE);
                 break;
@@ -233,7 +226,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSearchInteraction(VideoItems result) {
-        if (result != null){
+        if (result != null) {
             pornoVideosFragment.setVideoRecyclerView(result);
         }
     }

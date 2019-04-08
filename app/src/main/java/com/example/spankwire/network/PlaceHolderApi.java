@@ -2,14 +2,10 @@ package com.example.spankwire.network;
 
 import com.example.spankwire.PornoStar;
 import com.example.spankwire.VideoItems;
-
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 public interface PlaceHolderApi {
 
@@ -59,8 +55,8 @@ public interface PlaceHolderApi {
     @GET("api/pornstars/{id}")
     Call<PornoStar> getInfoPornoStar(@Path("id") int id);
 
-    @GET("/autosuggest")
-    Call<String> getSearchResult(@Query("key") String kay);
+//    @GET("/autosuggest")
+//    Call<String> getSearchResult(@Query("key") String key);
 
     @GET("api/video/list.json")
     Call<VideoItems> getVideoCategoriesSearch(@Query("segment") String straight,

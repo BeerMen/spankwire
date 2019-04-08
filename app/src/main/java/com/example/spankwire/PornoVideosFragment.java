@@ -17,6 +17,7 @@ import com.example.spankwire.network.NetworkService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,9 +25,9 @@ import retrofit2.Response;
 
 public class PornoVideosFragment extends Fragment implements RecyclerAdapter.ItemClickListener {
 
-    RecyclerView recyclerView;
-    RecyclerAdapter recyclerAdapter;
-    VideoItems videoItems;
+    private RecyclerView recyclerView;
+    protected RecyclerAdapter recyclerAdapter;
+    private VideoItems videoItems;
     private OnFragmentInteractionListener listener;
 
     @Nullable
@@ -49,7 +50,6 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         getListVideoPopularHome();
     }
 
@@ -58,12 +58,14 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
                 100, 1, "Relevance").enqueue(new Callback<VideoItems>() {
             @Override
             public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                setVideoRecyclerView(response.body());
+                if (response.body() != null) {
+                    setVideoRecyclerView(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-                Log.d("TEST", "exe home " + t.toString());
+                Log.d("DBAGME", t.toString());
             }
         });
     }
@@ -76,15 +78,14 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
                 "all_time").enqueue(new Callback<VideoItems>() {
             @Override
             public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                VideoItems videoItems = response.body();
-
-                setVideoRecyclerView(videoItems);
+                if (response.body() != null) {
+                    setVideoRecyclerView(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-
-                Log.d("TEST", "exe " + t.toString());
+                Log.d("DBAGME", t.toString());
             }
         });
     }
@@ -100,13 +101,14 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
                 .enqueue(new Callback<VideoItems>() {
                     @Override
                     public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                        Log.d("TEST", "Clik me link + 1 " + response.body().items.size());
-                        setVideoRecyclerView(response.body());
+                        if (response.body() != null){
+                            setVideoRecyclerView(response.body());
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<VideoItems> call, Throwable t) {
-                        Log.d("TEST", "Clik me link + 1 " + t.toString());
+                        Log.d("DBAGME", t.toString());
                     }
                 });
     }
@@ -119,12 +121,14 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
                 100).enqueue(new Callback<VideoItems>() {
             @Override
             public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                setVideoRecyclerView(response.body());
+                if (response.body() != null){
+                    setVideoRecyclerView(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-
+                Log.d("DBAGME", t.toString());
             }
         });
     }
@@ -135,7 +139,7 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
         List<Float> rating = new ArrayList<>();
 
         this.videoItems = videoItems;
-        if (videoItems != null){
+        if (videoItems != null) {
             for (int i = 0; i < videoItems.items.size(); i++) {
                 posterUrl.add(videoItems.items.get(i).poster2x);
                 title.add(videoItems.items.get(i).title);
@@ -151,9 +155,8 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
 
     @Override
     public void onItemClick(View view, int position) {
-        ((MainActivity) getActivity()).visibilityFragments(1);
+        ((MainActivity) Objects.requireNonNull(getActivity())).visibilityFragments(1);
         listener.onFragmentInteraction(videoItems.items.get(position).videoId);
-        Log.d("TEST", "Clik me " + position);
     }
 
     @Override
@@ -163,7 +166,7 @@ public class PornoVideosFragment extends Fragment implements RecyclerAdapter.Ite
             listener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + " должен реализовывать интерфейс");
         }
     }
 

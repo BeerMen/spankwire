@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.spankwire.network.NetworkService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,10 +25,10 @@ import retrofit2.Response;
 
 public class PornoStarFragment extends Fragment implements RecyclerAdapterPornoStar.ItemClickListenerPornoStar {
 
-    RecyclerView recyclerView;
-    RecyclerAdapterPornoStar recyclerAdapter;
+    private RecyclerView recyclerView;
+    protected RecyclerAdapterPornoStar recyclerAdapter;
     private OnPornoStarsInteractionListener listener;
-    VideoItems videoItems;
+    private VideoItems videoItems;
 
     @Nullable
     @Override
@@ -52,13 +54,15 @@ public class PornoStarFragment extends Fragment implements RecyclerAdapterPornoS
                 100).enqueue(new Callback<VideoItems>() {
             @Override
             public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                videoItems = response.body();
-                setPornoStars(response.body());
+                if (response.body() != null){
+                    videoItems = response.body();
+                    setPornoStars(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-
+                Log.d("DBAGME", t.toString());
             }
         });
     }
@@ -86,13 +90,13 @@ public class PornoStarFragment extends Fragment implements RecyclerAdapterPornoS
             listener = (PornoStarFragment.OnPornoStarsInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + " должен реализовывать интерфейс");
         }
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        ((MainActivity) getActivity()).visibilityFragments(2);
+        ((MainActivity) Objects.requireNonNull(getActivity())).visibilityFragments(2);
         listener.onPornoStarsInteraction(videoItems.items.get(position).id);
     }
 

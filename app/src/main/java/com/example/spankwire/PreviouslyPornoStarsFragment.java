@@ -16,20 +16,21 @@ import android.widget.TextView;
 import com.example.spankwire.network.NetworkService;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PreviouslyPornoStarsFragment extends Fragment implements View.OnClickListener {
 
-    TextView name;
-    TextView born;
-    TextView height;
-    TextView weight;
-    TextView hair;
-    TextView description;
-    ImageView poster;
-    Button video;
+    private TextView name;
+    private TextView born;
+    private TextView height;
+    private TextView weight;
+    private TextView hair;
+    private TextView description;
+    private ImageView poster;
     private OnPreviouslyPornoStarsInteractionListener listener;
     private PornoStar pornoStar;
 
@@ -50,8 +51,7 @@ public class PreviouslyPornoStarsFragment extends Fragment implements View.OnCli
         hair = view.findViewById(R.id.previously_porno_stars_hair);
         description = view.findViewById(R.id.previously_porno_stars_description);
         poster = view.findViewById(R.id.previously_porno_stars_poster);
-        video = view.findViewById(R.id.previously_porno_stars_video);
-        video.setOnClickListener(this);
+        view.findViewById(R.id.previously_porno_stars_video).setOnClickListener(this);
     }
 
     @Override
@@ -63,17 +63,19 @@ public class PreviouslyPornoStarsFragment extends Fragment implements View.OnCli
         NetworkService.getService().getJsonApi().getInfoPornoStar(id).enqueue(new Callback<PornoStar>() {
             @Override
             public void onResponse(Call<PornoStar> call, Response<PornoStar> response) {
-                pornoStar = response.body();
-                setView(response.body());
+                if (response.body() != null){
+                    pornoStar = response.body();
+                    setView(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<PornoStar> call, Throwable t) {
-
-                Log.d("TEST", t.toString());
+                Log.d("DBAGME", t.toString());
             }
         });
     }
+
     private void setView(PornoStar pornoStar){
         name.setText(pornoStar.name);
         born.setText(pornoStar.birthday);
@@ -84,6 +86,7 @@ public class PreviouslyPornoStarsFragment extends Fragment implements View.OnCli
 
         Picasso.get().load(pornoStar.thumb).into(poster);
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -91,13 +94,13 @@ public class PreviouslyPornoStarsFragment extends Fragment implements View.OnCli
             listener = (OnPreviouslyPornoStarsInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + " должен реализовывать интерфейс");
         }
     }
 
     @Override
     public void onClick(View v) {
-        ((MainActivity) getActivity()).visibilityFragments(2);
+        ((MainActivity) Objects.requireNonNull(getActivity())).visibilityFragments(2);
         listener.onPreviouslyPornoStarsInteraction(pornoStar.id);
     }
 

@@ -11,5 +11,4 @@ public class PornoStar {
     String thumb;
     String hair_color;
     String url;
-
 }

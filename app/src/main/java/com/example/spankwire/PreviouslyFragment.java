@@ -29,19 +29,18 @@ import retrofit2.Response;
 
 public class PreviouslyFragment extends Fragment implements View.OnClickListener {
 
-    TextView name;
-    TextView duration;
-    TextView description;
-    TextView viewed;
-    TextView categories;
-    TextView categoriesOne;
-    TextView categoriesTwo;
-    TextView categoriesThree;
-    TextView categoriesFour;
-    TextView categoriesFive;
-    TextView categoriesSix;
-    ImageView poster;
-    VideoItems videoItem;
+    private TextView name;
+    private TextView duration;
+    private TextView description;
+    private TextView viewed;
+    private TextView categoriesOne;
+    private TextView categoriesTwo;
+    private TextView categoriesThree;
+    private TextView categoriesFour;
+    private TextView categoriesFive;
+    private TextView categoriesSix;
+    private ImageView poster;
+    private VideoItems videoItem;
     private PornoVideosFragment.OnFragmentInteractionListener listener;
 
     @Nullable
@@ -57,10 +56,8 @@ public class PreviouslyFragment extends Fragment implements View.OnClickListener
         duration = view.findViewById(R.id.duration_previously);
         description = view.findViewById(R.id.description_previously);
         viewed = view.findViewById(R.id.viewed_previously);
-        categories = view.findViewById(R.id.categories);
         poster = view.findViewById(R.id.poster_previously);
         poster.setOnClickListener(this);
-
         categoriesOne = view.findViewById(R.id.categories_previously_one);
         categoriesOne.setOnClickListener(this);
         categoriesTwo = view.findViewById(R.id.categories_previously_two);
@@ -95,7 +92,7 @@ public class PreviouslyFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-                Log.d("TEST", "Clik me exe" + t.toString());
+                Log.d("DBAGME", t.toString());
             }
         });
     }
@@ -207,7 +204,7 @@ public class PreviouslyFragment extends Fragment implements View.OnClickListener
             listener = (PornoVideosFragment.OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + " должен реализовывать интерфейс");
         }
     }
 }

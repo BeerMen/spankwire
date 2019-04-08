@@ -19,15 +19,16 @@ import com.example.spankwire.network.NetworkService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CategoriesFragment extends Fragment implements RecyclerAdapterCategories.ItemClickListenerCategories{
-    RecyclerView recyclerView;
-    RecyclerAdapterCategories recyclerAdapter;
-    VideoItems videoItems;
+    private RecyclerView recyclerView;
+    protected RecyclerAdapterCategories recyclerAdapter;
+    private VideoItems videoItems;
     private PornoVideosFragment.OnFragmentInteractionListener listener;
 
     @Nullable
@@ -46,6 +47,7 @@ public class CategoriesFragment extends Fragment implements RecyclerAdapterCateg
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerAdapter);
     }
+
     public void getListCategories(){
         NetworkService.getService().getJsonApi().getCategoriesList(1,
                 0,
@@ -53,13 +55,15 @@ public class CategoriesFragment extends Fragment implements RecyclerAdapterCateg
                 100).enqueue(new Callback<VideoItems>() {
             @Override
             public void onResponse(Call<VideoItems> call, Response<VideoItems> response) {
-                videoItems = response.body();
-                setCategories(response.body());
+                if (response.body() != null){
+                    videoItems = response.body();
+                    setCategories(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<VideoItems> call, Throwable t) {
-
+                Log.d("DBAGME", t.toString());
             }
         });
     }
@@ -78,8 +82,7 @@ public class CategoriesFragment extends Fragment implements RecyclerAdapterCateg
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.d("TEST", "CLICK POSITION " + position);
-        ((MainActivity) getActivity()).visibilityFragments(2);
+        ((MainActivity) Objects.requireNonNull(getActivity())).visibilityFragments(2);
         listener.onCategoriesInteraction(videoItems.items.get(position).id);
     }
     @Override
@@ -89,7 +92,7 @@ public class CategoriesFragment extends Fragment implements RecyclerAdapterCateg
             listener = (PornoVideosFragment.OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " должен реализовывать интерфейс OnFragmentInteractionListener");
+                    + " должен реализовывать интерфейс");
         }
     }
 }
